@@ -1,0 +1,23 @@
+server:
+  port: 8787
+  context-path: /
+
+ssoServerPort: 8585
+systemName: DEVS_MAIN
+  
+spring:  
+  batch:
+    job:
+      enabled: false
+  datasource:
+    url: jdbc:oracle:thin:@qclass.iptime.org:1521:xe
+    driverClassName: oracle.jdbc.OracleDriver
+    username: bigfinal03
+    password: bigfinal03
+
+    
+logging.level:
+  root: warn
+  org.springframework:
+    boot: info
+  com.acompany.asystem: debug

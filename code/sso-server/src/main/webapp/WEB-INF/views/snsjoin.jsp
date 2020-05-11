@@ -29,11 +29,11 @@
 						<legend>optional</legend>
 						
 						<!-- 이메일 -->
-						<input type="text" name="memberaccount" placeholder="휴대폰 번호 또는 이메일 주소">
+						<input type="text" name="memberaccount" value="${email}" placeholder="휴대폰 번호 또는 이메일 주소">
 						<div id="emailchk"></div>
 						
 						<!-- 성명 -->
-						<input type="text" name="membername" placeholder="사용자 이름">
+						<input type="text" name="membername" value="${nickname}" placeholder="사용자 이름">
 					</fieldset>
 					
 					<fieldset>
@@ -71,7 +71,9 @@
 
 <!-- START :: submit 버튼 disabled handler -->
 <script type="text/javascript">
-
+	$(function(){
+		$("input[name='memberaccount']").focus();
+	})
 	var memberaccount;	// email 또는 phone의 input name 설정
 
 	// null 및 공백 체크, 유효성 체크
@@ -174,70 +176,76 @@
 
 	$(function() {
 
+		accountKeyUpAndFocus();
+		
+		memberaccount.on({
+			keyup: function(){
+				accountKeyUpAndFocus();
+			}
+		})
+		
+	});
+	
+	function accountKeyUpAndFocus(){
 		// 이메일 정규식
 		var regExpEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
 		
 		// 핸드폰번호 정규식 (010-1234-1234)
 		var regExpPhone = /^\d{3}-\d{4}-\d{4}$/;
 		
-		memberaccount.keyup(function() {
-			$("#emailchk").text("");
+		$("#emailchk").text("");		
+		accountValue = memberaccount.val();
+		
+		if(accountValue != null && accountValue != "") {
 			
-			accountValue = memberaccount.val();
+			if(regExpEmail.test(accountValue)) { // 이메일 형식이라면
+				memberaccount.attr({
+					"name" : "memberemail"
+				});
 			
-			if(accountValue != null && accountValue != "") {
-				
-				if(regExpEmail.test(accountValue)) { // 이메일 형식이라면
-					memberaccount.attr({
-						"name" : "memberemail"
-					});
-				
-					var joinVal = {
-						"memberemail" : accountValue
-					}
-				
-					// 이메일 중복 검사
-					$.ajax({
-						type: "post",
-						url: "/emailCheck",
-						data: JSON.stringify(joinVal),
-						contentType: "application/json",
-						dataType: "json",
-						
-						success: function(msg){
-							
-							if (msg.check == true) {
-								$("#emailchk").text("이미 존재하는 EMAIL 입니다.").css("color","red");
-								memberaccountBool = false;
-							} else {
-								$("#emailchk").text("사용가능한 EMAIL 입니다.").css("color","green");
-								memberaccountBool = true;
-							}
-							
-							disableHandler(); // submit 버튼 disabled handler
-						},
-						
-						error: function(){
-							alert("통신실패");
-						}
-					});
-				
-				} else if(regExpPhone.test(accountValue)) {	// 핸드폰번호 형식이라면
-					$("#joinchk").hide();
-				
-					memberaccount.attr({                                                                                                                                                                                                                                                                               
-						"name" : "memberphone"
-					})
+				var joinVal = {
+					"memberemail" : accountValue
 				}
-				
-			} else {
-				memberaccountBool = true;
-				disableHandler(); // submit 버튼 disabled handler
+			
+				// 이메일 중복 검사
+				$.ajax({
+					type: "post",
+					url: "/emailCheck",
+					data: JSON.stringify(joinVal),
+					contentType: "application/json",
+					dataType: "json",
+					
+					success: function(msg){
+						
+						if (msg.check == true) {
+							$("#emailchk").text("이미 존재하는 EMAIL 입니다.").css("color","red");
+							memberaccountBool = false;
+						} else {
+							$("#emailchk").text("사용가능한 EMAIL 입니다.").css("color","green");
+							memberaccountBool = true;
+						}
+						
+						disableHandler(); // submit 버튼 disabled handler
+					},
+					
+					error: function(){
+						alert("통신실패");
+					}
+				});
+			
+			} else if(regExpPhone.test(accountValue)) {	// 핸드폰번호 형식이라면
+				$("#joinchk").hide();
+			
+				memberaccount.attr({                                                                                                                                                                                                                                                                               
+					"name" : "memberphone"
+				})
 			}
 			
-		});
-		
-	});
+		} else {
+			memberaccountBool = true;
+			disableHandler(); // submit 버튼 disabled handler
+		}
+	}
 	
 </script>
 <!-- END :: email, phone 타입체크, 중복검사 -->

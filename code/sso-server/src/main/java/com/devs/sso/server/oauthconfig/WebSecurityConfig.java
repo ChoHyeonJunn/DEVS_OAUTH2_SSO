@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/emailCheck", //
 						"/idCheck",//
 						"/kakaoOauth",
+						"/naverOauth",
 						"/snsjoin")//
 						
 				

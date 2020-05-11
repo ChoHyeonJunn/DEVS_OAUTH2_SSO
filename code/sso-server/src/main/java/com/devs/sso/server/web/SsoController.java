@@ -1,5 +1,6 @@
 package com.devs.sso.server.web;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,13 +20,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.devs.sso.server.common.sns.KakaoRestAPI;
+import com.devs.sso.server.common.sns.kakao.KakaoRestAPI;
+import com.devs.sso.server.common.sns.naver.NaverLoginBO;
 import com.devs.sso.server.model.domain.entity.AccessToken;
 import com.devs.sso.server.model.domain.entity.Member;
 import com.devs.sso.server.model.service.MemberService;
 import com.devs.sso.server.model.service.SsoService;
 import com.devs.sso.server.model.vo.MemberVo;
 import com.devs.sso.server.model.vo.UserInfoResponse;
+import com.github.scribejava.core.model.OAuth2AccessToken;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @Controller
 public class SsoController {
@@ -151,12 +156,12 @@ public class SsoController {
 		 * sns_id는 db에 sns_id 컬럼과 password(bcrypt되어) 컬럼에 저장되어 있음 -> 조회
 		 */
 		Member vo = memberService.snsMemberCheck(userInfo.get("sns_id"));
-		
+
 		System.out.println("kakao snsMemberCheck : " + vo);
 		if (vo != null) { // 횐갑 되어있으면 -> 로그인 (순식간에 지나가서 안보임 ㅎ)
-			
+
 			System.out.println("kakao member : " + vo);
-			
+
 			model.addAttribute("member_id", vo.getMemberid());
 			model.addAttribute("member_password", vo.getSnsid());
 
@@ -165,6 +170,73 @@ public class SsoController {
 		} else { // 횐갑 안되있으면 -> 횐갑 페이지
 			model.addAttribute("snsType", "KAKAO");
 			model.addAttribute("sns_id", userInfo.get("sns_id"));
+			model.addAttribute("email", userInfo.get("email"));
+			model.addAttribute("nickname", userInfo.get("nickname"));
+
+			return "snsjoin";
+
+		}
+	}
+
+	/*
+	 * kakao 로그인
+	 */
+	@Autowired
+	private NaverLoginBO naverLoginBO;
+
+	@RequestMapping(value = "/naverOauth", method = { RequestMethod.GET, RequestMethod.POST })
+	public String naverLogin(@RequestParam("code") String code, @RequestParam("state") String state, Model model,
+			HttpSession session) {
+		System.out.println("ssoController : @RequestMappring('naverOauth')");
+
+		OAuth2AccessToken oauthToken;
+		String apiResult = null;
+		try {
+
+			oauthToken = naverLoginBO.getAccessToken(session, code, state);
+			// 로그인 사용자 정보를 읽어온다.
+			apiResult = naverLoginBO.getUserProfile(oauthToken);
+
+		} catch (IOException e) {
+			System.out.println("ERROR ON NAVERLOGIN");
+			e.printStackTrace();
+		}
+
+		System.out.println("\n### apiResult : " + apiResult + "\n");
+
+		JsonParser jsonParser = new JsonParser();
+		JsonObject naverRes = (JsonObject) jsonParser.parse(apiResult);
+
+		JsonObject response = naverRes.get("response").getAsJsonObject();
+
+		String sns_id = response.get("id").getAsString();
+		String email = response.get("email").getAsString();
+		String name = response.get("name").getAsString();
+
+		System.out.println("sns_id : " + sns_id);
+		System.out.println("email : " + email);
+		System.out.println("name : " + name);
+
+		/*
+		 * sns_id는 db에 sns_id 컬럼과 password(bcrypt되어) 컬럼에 저장되어 있음 -> 조회
+		 */
+		Member vo = memberService.snsMemberCheck(sns_id);
+
+		System.out.println("naver snsMemberCheck : " + vo);
+		if (vo != null) { // 횐갑 되어있으면 -> 로그인 (순식간에 지나가서 안보임 ㅎ)
+
+			System.out.println("naver member : " + vo);
+
+			model.addAttribute("member_id", vo.getMemberid());
+			model.addAttribute("member_password", vo.getSnsid());
+
+			return "snsloginForm";
+
+		} else { // 횐갑 안되있으면 -> 횐갑 페이지
+			model.addAttribute("snsType", "NAVER");
+			model.addAttribute("sns_id", sns_id);
+			model.addAttribute("email", email);
+			model.addAttribute("nickname", name);
 
 			return "snsjoin";
 

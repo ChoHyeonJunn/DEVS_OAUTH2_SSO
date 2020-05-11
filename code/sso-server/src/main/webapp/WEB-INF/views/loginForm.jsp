@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
-    pageEncoding="EUC-KR"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
     
-<%-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
- --%><%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> --%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
@@ -18,7 +18,7 @@
 <!-- END :: JS import -->
 
 <!-- START :: CSS -->
-	<!-- ÀÌ°Å´Â -¶Ç´Â- ÀÌ°Å¶ó¼­ ¤¾¤¾.. -->
+	<!-- ì´ê±°ëŠ” -ë˜ëŠ”- ì´ê±°ë¼ì„œ ã…ã….. -->
 <style type="text/css">
 .hr-sect {
 	display: flex;
@@ -51,20 +51,20 @@
 			
 			<div>				
 				<form action="/loginProcess" method="post">			
-					<!-- ÀÌ¸ŞÀÏ -->
-					<input type="text" name="member_id" required="required" placeholder="ÀüÈ­¹øÈ£, »ç¿ëÀÚ ÀÌ¸§ ¶Ç´Â ÀÌ¸ŞÀÏ">
+					<!-- ì´ë©”ì¼ -->
+					<input type="text" name="member_id" required="required" placeholder="ì „í™”ë²ˆí˜¸, ì‚¬ìš©ì ì´ë¦„ ë˜ëŠ” ì´ë©”ì¼">
 					
-					<!-- ºñ¹Ğ¹øÈ£ -->
-					<input type="password" name="member_password" required="required" placeholder="ºñ¹Ğ¹øÈ£">
+					<!-- ë¹„ë°€ë²ˆí˜¸ -->
+					<input type="password" name="member_password" required="required" placeholder="ë¹„ë°€ë²ˆí˜¸">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					
-					<!-- ·Î±×ÀÎ ¹öÆ° -->
+					<!-- ë¡œê·¸ì¸ ë²„íŠ¼ -->
 					<input type="submit" value="LOGIN">
 				</form>
 				
 			</div>
 			
-			<div class="hr-sect">¶Ç´Â</div>
+			<div class="hr-sect">ë˜ëŠ”</div>
 			
 			<div>
 				<span>
@@ -72,26 +72,28 @@
 						<img src="/resources/images/social/kakao/kakaolink_btn_medium.png" width="100px;"/> 
 					</a>
 				</span>
-				<span>
-					<a id="naver_id_login"></a>
-				</span>
+
+				<a href="javascript:loginWithNaverRest()">
+					<img src="/resources/images/social/naver/naver_login.PNG" width="223" />
+				</a>
+				
 								
 				<div>
-					<a href="#">ºñ¹Ğ¹øÈ£¸¦ ÀØÀ¸¼Ì³ª¿ä?</a>
+					<a href="#">ë¹„ë°€ë²ˆí˜¸ë¥¼ ìŠìœ¼ì…¨ë‚˜ìš”?</a>
 				</div>
 			</div>			
 			
 		</div>
 
 	 	<div>
-			°èÁ¤ÀÌ ¾øÀ¸½Å°¡¿ä?
-			<a href="/signup">&nbsp;°¡ÀÔÇÏ±â </a>
+			ê³„ì •ì´ ì—†ìœ¼ì‹ ê°€ìš”?
+			<a href="/signup">&nbsp;ê°€ì…í•˜ê¸° </a>
 		</div>
 	</section>
 
 	
 	<section>
-		<h1>»çÀÌÆ®¼Ò°³</h1>
+		<h1>ì‚¬ì´íŠ¸ì†Œê°œ</h1>
 		
 		<div>
 	
@@ -100,15 +102,32 @@
 	
 </body>
 
-<%-- <spring:eval expression="@property('social.kakao-login-link')" var="kakaoLoginLink"/> --%>
+<!-- START :: application.yml ì°¸ì¡° -->
+	<spring:eval expression="@environment.getProperty('server.port')" var="serverPort"/>
+	<spring:eval expression="@environment.getProperty('ssoDomain')" var="ssoDomain"/>
+	
+	<spring:eval expression="@environment.getProperty('social-link.kakao-login-link')" var="kakaoLoginLink"/>
+	<spring:eval expression="@environment.getProperty('social-link.kakao-rest-api-key')" var="kakaoRestApiKey"/>
+	
+	<spring:eval expression="@environment.getProperty('social-link.naver-login-link')" var="naverLoginLink"/>
+	<spring:eval expression="@environment.getProperty('social-link.naver-rest-api-key')" var="naverRestApiKey"/>
+	<spring:eval expression="@environment.getProperty('social-link.naver-oauth-state')" var="naverOauthState"/>
+<!-- END :: application.yml ì°¸ì¡° -->
 
 <!-- START :: KAKAO LOGIN -->
 	<script type="text/javascript">
 		function loginWithKakaoRest(){	
-			/* location.href='${kakaoLoginLink}' */
-			location.href='https://kauth.kakao.com/oauth/authorize?client_id=4be0db1fcb83bc9cf8c11a9fbca76507&redirect_uri=http://localhost:8585/kakaoOauth&response_type=code';
+			location.href='${kakaoLoginLink}?client_id=${kakaoRestApiKey}&redirect_uri=http://${ssoDomain}:${serverPort}/kakaoOauth&response_type=code';
 		}
 	</script>
 <!-- END :: KAKAO LOGIN -->
+
+<!-- START :: NAVER LOGIN -->
+	<script type="text/javascript">
+		function loginWithNaverRest(){
+			location.href='${naverLoginLink}?response_type=code&client_id=${naverRestApiKey}&redirect_uri=http://${ssoDomain}:${serverPort}/naverOauth&state=${naverOauthState}';
+		}
+	</script>
+<!-- END :: NAVER LOGIN -->
 
 </html>

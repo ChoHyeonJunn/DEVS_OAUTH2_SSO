@@ -1,4 +1,4 @@
-package com.devs.sso.server.common.sns;
+package com.devs.sso.server.common.sns.kakao;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -52,7 +52,7 @@ public class KakaoRestAPI {
 			bw.flush();
 
 			System.out.println("request : " + sb.toString());
-			
+
 			// 결과 코드가 200이라면 성공
 			int responseCode = conn.getResponseCode();
 			System.out.println("responseCode : " + responseCode);

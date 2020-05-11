@@ -12,7 +12,6 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <!-- END :: JS import -->
 
-
 </head>
 <body>
 			
@@ -24,7 +23,7 @@
 	
 </body>
 
-<!-- START :: KAKAO LOGIN -->
+<!-- START :: SNS LOGIN -->
 	<script type="text/javascript">
 		$(function(){
 			$("input[name='member_id']").val('${member_id}');
@@ -33,6 +32,6 @@
 			$("#snsloginform").submit();
 		})
 	</script>
-<!-- END :: KAKAO LOGIN -->
+<!-- END :: SNS LOGIN -->
 
 </html>

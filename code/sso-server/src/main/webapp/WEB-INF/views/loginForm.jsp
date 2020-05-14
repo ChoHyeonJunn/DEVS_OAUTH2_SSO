@@ -43,6 +43,9 @@
 
 </head>
 <body>
+
+	<h1>${kakaoLoginLink}</h1>
+	
 	<section>
 	 	
 		
@@ -125,7 +128,9 @@
 <!-- START :: NAVER LOGIN -->
 	<script type="text/javascript">
 		function loginWithNaverRest(){
-			location.href='${naverLoginLink}?response_type=code&client_id=${naverRestApiKey}&redirect_uri=http://${ssoDomain}:${serverPort}/naverOauth&state=${naverOauthState}';
+			const url = '${naverLoginLink}?response_type=code&client_id=${naverRestApiKey}&redirect_uri=http://${ssoDomain}:${serverPort}/naverOauth&state=${naverOauthState}';
+			alert(url);
+			location.href = url;
 		}
 	</script>
 <!-- END :: NAVER LOGIN -->

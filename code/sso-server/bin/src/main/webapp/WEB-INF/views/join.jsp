@@ -1,9 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-
-<%@page isELIgnored="false" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -29,14 +25,13 @@
 			<div>
 				<span>
 					<a id="custom-login-btn" href="javascript:loginWithKakaoRest()">
-						<img src="/resources/images/social/kakao/kakaolink_btn_medium.png" width="100px;"/> 
+<!-- 						<img src="/resources/images/social/kakaolink_btn_medium.png" width="100px;"/> -->
 					</a>
 				</span>
-
-				<a href="javascript:loginWithNaverRest()">
-					<img src="/resources/images/social/naver/naver_login.PNG" width="223" />
-				</a>
-			</div>		
+				<span>
+					<a id="naver_id_login"></a>
+				</span>
+			</div>	
 			
 			<div>
 				<hr>
@@ -277,37 +272,5 @@
 
 </script>
 <!-- END :: form submit -->
-
-<!-- START :: application.yml 참조 -->
-	<spring:eval expression="@environment.getProperty('server.port')" var="serverPort"/>
-	<spring:eval expression="@environment.getProperty('ssoDomain')" var="ssoDomain"/>
-	
-	<spring:eval expression="@environment.getProperty('social-link.kakao-login-link')" var="kakaoLoginLink"/>
-	<spring:eval expression="@environment.getProperty('social-link.kakao-rest-api-key')" var="kakaoRestApiKey"/>
-	
-	<spring:eval expression="@environment.getProperty('social-link.naver-login-link')" var="naverLoginLink"/>
-	<spring:eval expression="@environment.getProperty('social-link.naver-rest-api-key')" var="naverRestApiKey"/>
-	<spring:eval expression="@environment.getProperty('social-link.naver-oauth-state')" var="naverOauthState"/>
-<!-- END :: application.yml 참조 -->
-
-<!-- START :: KAKAO LOGIN -->
-	<script type="text/javascript">
-		function loginWithKakaoRest(){	
-			const url = '${kakaoLoginLink}?client_id=${kakaoRestApiKey}&redirect_uri=http://${ssoDomain}:${serverPort}/kakaoOauth&response_type=code';
-// 			const url = 'https://kauth.kakao.com/oauth/authorize?client_id=4be0db1fcb83bc9cf8c11a9fbca76507&redirect_uri=http://3.136.253.121:8585/kakaoOauth&response_type=code';
-			location.href=url;
-		}
-	</script>
-<!-- END :: KAKAO LOGIN -->
-
-<!-- START :: NAVER LOGIN -->
-	<script type="text/javascript">
-		function loginWithNaverRest(){
-			const url = '${naverLoginLink}?response_type=code&client_id=${naverRestApiKey}&redirect_uri=http://${ssoDomain}:${serverPort}/naverOauth&state=${naverOauthState}';
-// 			const url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=ZnB1hkTBDYaRrVgb5rpz&redirect_uri=http://3.136.253.121:8585/naverOauth&state=550e8400-e29b-41d4-a716-446655440000';
-			location.href=url;
-		}
-	</script>
-<!-- END :: NAVER LOGIN -->
 
 </html>

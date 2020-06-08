@@ -34,7 +34,7 @@ import com.google.gson.JsonParser;
 
 @Controller
 public class SsoController {
-	//
+
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Value("${ssoDomain}")
@@ -210,8 +210,16 @@ public class SsoController {
 		JsonObject response = naverRes.get("response").getAsJsonObject();
 
 		String sns_id = response.get("id").getAsString();
-		String email = response.get("email").getAsString();
-		String name = response.get("name").getAsString();
+		String email = null;
+		String name = null;
+		
+		if(response.get("email") != null) {
+			email = response.get("email").getAsString();
+		}
+		
+		if(response.get("name") != null) {
+			name = response.get("name").getAsString();
+		}
 
 		System.out.println("sns_id : " + sns_id);
 		System.out.println("email : " + email);

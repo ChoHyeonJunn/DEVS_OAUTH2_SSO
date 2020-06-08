@@ -1,12 +1,13 @@
 # 외부 DB 설정시 아래의 주석을 활성화 시킨 후 관련 DB 설정 정보를 입력한다.
 server:
   context-path: /
-  port: 80  
+  port: 8585  
   session:
     cookie:
       name: APPSESSIONID
       
-ssoDomain: www.devssso.ml
+#ssoDomain: 3.136.253.121
+ssoDomain: localhost
 
 spring:
   jpa:

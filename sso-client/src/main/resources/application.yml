@@ -1,0 +1,29 @@
+server:
+  port: 8888
+  context-path: /
+
+ssoDoamin: 3.136.253.121
+#ssoDoamin: localhost
+
+clientDomain: 3.136.253.121
+#clientDomain: localhost
+
+ssoServerPort: 8585
+systemName: DEVS_GROUP
+  
+spring:  
+  batch:
+    job:
+      enabled: false
+  datasource:
+    url: jdbc:oracle:thin:@qclass.iptime.org:1521:xe
+    driverClassName: oracle.jdbc.OracleDriver
+    username: bigfinal03
+    password: bigfinal03
+
+    
+logging.level:
+  root: warn
+  org.springframework:
+    boot: info
+  com.sample.ssoclient: debug

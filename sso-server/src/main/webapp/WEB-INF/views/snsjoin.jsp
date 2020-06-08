@@ -12,64 +12,111 @@
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <!-- END :: js import -->
 
+	<link rel="icon" type="image/png" href="/resources/images/icons/favicon.ico"/>
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/bootstrap/css/bootstrap.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/fonts/iconic/css/material-design-iconic-font.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/animate/animate.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/css-hamburgers/hamburgers.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/animsition/css/animsition.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/select2/select2.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/daterangepicker/daterangepicker.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
+
 </head>
 <body>
-	<section>
-	 	
+	<div class="limiter">
+		<div class="container-login100">
 		
-		<div>
-			<h1>
-				${snsType } 회원가입
-			</h1>
-			<h3>
-				친구들의 사진과 동영상을 보려면 ${snsType }로 가입하세요.
-			</h3>
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 									
-			<div>		
-				<form id="joinForm" action="/snsjoin" method="post" name="MemberVo">
+				<span class="login100-form-title p-b-49">
+					Devs <img src="/resources/images/logo.png" width="15%;"></img> ${snsType } Join
+                </span>
+                <p>친구들의 사진과 동영상을 보려면 가입해주세요.</p><br>
+										
+				<form id="joinForm" action="/snsjoin" method="post" name="MemberVo" class="login100-form validate-form">
 				
-					<fieldset>
-						<legend>optional</legend>
-						
-						<!-- 이메일 -->
-						<input type="text" name="memberaccount" value="${email}" placeholder="휴대폰 번호 또는 이메일 주소">
-						<div id="emailchk"></div>
-						
-						<!-- 성명 -->
-						<input type="text" name="membername" value="${nickname}" placeholder="사용자 이름">
-					</fieldset>
+					<!-- 이메일 -->
+					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
+						<span class="label-input100">휴대폰 번호 또는 이메일 주소</span>
+						<input class="input100" type="text" name="memberaccount" value="${email}" placeholder="Type your phone or email">
+						<span class="focus-input100" data-symbol="&#xf206;"></span>
+                    </div>	
+					<div id="emailchk"></div>
 					
-					<fieldset>
-						<legend>essential</legend>
+					<!-- 성명 -->
+					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
+						<span class="label-input100">사용자 이름</span>
+						<input class="input100" type="text" name="membername" value="${nickname}" placeholder="Type your username">
+						<span class="focus-input100" data-symbol="&#xf206;"></span>
+					</div>
+					
+					<!-- 아이디 -->
+					<div class="wrap-input100 validate-input m-b-23" data-validate="Password is required">
+						<span class="label-input100">사용자 아이디</span>
+						<input class="input100" type="text" name="memberid" required="required" placeholder="Type your ID">
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
+                    </div>	
+					<div id="idchk"></div>
 						
-						<!-- 아이디 -->
-						<input type="text" name="memberid" required="required" placeholder="사용자 아이디">
-						<div id="idchk"></div>
-						
-						<!-- 비밀번호 -->
-						<input type="hidden" name="memberpassword" value="${sns_id }">
-						<!-- snsid -->
-						<input type="hidden" name="snsid" value="${sns_id }">
-						<!-- snstye -->
-						<input type="hidden" name="snstype" value="${snsType }">
-					</fieldset>
+					<!-- 비밀번호 -->
+					<input type="hidden" name="memberpassword" value="${sns_id }">
+					<!-- snsid -->
+					<input type="hidden" name="snsid" value="${sns_id }">
+					<!-- snstye -->
+					<input type="hidden" name="snstype" value="${snsType }">
+					
+					<div class="text-right p-t-8 p-b-31"></div>
 					
 					<!-- 회원가입 버튼 -->					
-					<input type="submit" value="JOIN">
-					<!-- 유효성검층 출력부분 -->
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button class="login100-form-btn" type="submit" value="JOIN">
+								Join
+							</button>
+						</div>
+					</div>
 					
 				</form>
-
-			</div>		
+				
+		 		<div class="flex-col-c p-t-155">
+					<span class="txt1 p-b-17">
+						계정이 있으신가요?
+					</span>
+	
+					<a href="/loginForm" class="txt2">
+						<div class="container-login100-form-btn">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button class="login100-form-btn">
+									Login
+								</button>
+							</div>
+						</div>
+					</a>
+				</div>
+				
+			</div>
 			
 		</div>
-
-	 
- 		<div>
-			계정이 있으신가요?
-			<a href="/loginForm">&nbsp;로그인 </a>
-		</div>
-	</section>
+	</div>
+	
+	<div id="dropDownSelect1"></div>
+	
+	<script src="/resources/js/main.js"></script>
+	
 </body>
 
 <!-- START :: submit 버튼 disabled handler -->
@@ -170,7 +217,7 @@
 			
 		});
 		
-	})
+	});
 </script>
 <!-- END :: id 중복검사 -->
 

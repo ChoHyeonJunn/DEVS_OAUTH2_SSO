@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
     
 <%@page isELIgnored="false" %>
-<%-- <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <!DOCTYPE html>
@@ -10,96 +10,149 @@
 <head>
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-<meta charset="EUC-KR">
+
+<meta charset="UTF-8">
 <title>Insert title here</title>
-
-
-<!-- START :: JS import -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<!-- END :: JS import -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- START :: CSS -->
-	<!-- 이거는 -또는- 이거라서 ㅎㅎ.. -->
-<style type="text/css">
-.hr-sect {
-	display: flex;
-	flex-basis: 100%;
-	align-items: center;
-	color: rgba(0, 0, 0, 0.35);
-	font-size: 12px;
-	margin: 8px 0px;
-}
-   
-.hr-sect::before, .hr-sect::after {
-	content: "";
-	flex-grow: 1;
-	background: rgba(0, 0, 0, 0.35);
-	height: 1px;
-	font-size: 0px;
-	line-height: 0px;
-	margin: 0px 16px;
-}
-</style>
+
+    <link rel="icon" type="image/png" href="/resources/images/icons/favicon.ico"/>
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/bootstrap/css/bootstrap.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/fonts/iconic/css/material-design-iconic-font.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/animate/animate.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/css-hamburgers/hamburgers.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/animsition/css/animsition.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/select2/select2.min.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/vendor/daterangepicker/daterangepicker.css">
+
+	<link rel="stylesheet" type="text/css" href="/resources/css/util.css">
+	<link rel="stylesheet" type="text/css" href="/resources/css/main.css">
+
 <!-- END :: CSS -->
 
 </head>
 <body>
-	<section>
-	 	
-		
-		<div>
-			<h1>DEVS</h1>
+<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
 			
-			<div>				
-				<form action="/loginProcess" method="post">			
-					<!-- 이메일 -->
-					<input type="text" name="member_id" required="required" placeholder="전화번호, 사용자 이름 또는 이메일">
+				<form action="/loginProcess" method="post" class="login100-form validate-form">
+					<span class="login100-form-title p-b-49">
+						Devs <img src="/resources/images/logo.png" width="15%;"></img> Login
+					</span>
+
+					<div class="wrap-input100 validate-input m-b-23" data-validate="Username is reauired">
+						<span class="label-input100">Username</span>
+						<input class="input100" type="text" name="member_id" required="required" placeholder="Type your username">
+						<span class="focus-input100" data-symbol="&#xf206;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-23" data-validate="Password is required">
+						<span class="label-input100">Password</span>
+						<input class="input100" type="password" name="member_password" required="required" placeholder="Type your password">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+						<span class="focus-input100" data-symbol="&#xf190;"></span>
+					</div>
 					
-					<!-- 비밀번호 -->
-					<input type="password" name="member_password" required="required" placeholder="비밀번호">
-					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<c:if test="${not empty sessionScope.errorMessage }">
+						<div id="loginFailureMessage">
+							<p style="color: red;">${sessionScope.errorMessage }
+						</div>
+					</c:if>
 					
-					<!-- 로그인 버튼 -->
-					<input type="submit" value="LOGIN">
+					<div class="container-login100-form-btn">
+						<div class="wrap-login100-form-btn">
+							<div class="login100-form-bgbtn"></div>
+							<button class="login100-form-btn" type="submit" value="LOGIN">
+								Login
+							</button>
+						</div>
+					</div>
 				</form>
+
+				<div class="txt1 text-center p-t-54 p-b-20">
+					<span>
+						카카오톡 & 네이버 로그인
+					</span>
+				</div>
+
+				<div class="flex-c-m">
+					<a href="javascript:loginWithKakaoRest()" class="login100-social-item bg1" id="custom-login-btn">
+						<img src="/resources/images/social/kakao/kakaolink_btn_medium.png"></img>
+					</a> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp 
+
+					<a href="javascript:loginWithNaverRest()" class="login100-social-item bg2">
+						<img src="/resources/images/social/naver/naver.png" width="135%"></img>
+					</a>
+
+					
+				</div>
+
+				<div class="flex-col-c p-t-155">
+					<span class="txt1 p-b-17">
+						계정이 없으신가요?
+					</span>
+
+					<a href="/signup" class="txt2">
+						<div class="container-login100-form-btn">
+							<div class="wrap-login100-form-btn">
+								<div class="login100-form-bgbtn"></div>
+								<button class="login100-form-btn">
+									Join
+								</button>
+							</div>
+						</div>
+					</a>
+				</div>
 				
 			</div>
-			
-			<div class="hr-sect">또는</div>
-			
-			<div>
-				<span>
-					<a id="custom-login-btn" href="javascript:loginWithKakaoRest()">
-						<img src="/resources/images/social/kakao/kakaolink_btn_medium.png" width="100px;"/> 
-					</a>
-				</span>
-
-				<a href="javascript:loginWithNaverRest()">
-					<img src="/resources/images/social/naver/naver_login.PNG" width="223" />
-				</a>
-				
-								
-				<div>
-					<a href="#">비밀번호를 잊으셨나요?</a>
-				</div>
-			</div>			
-			
 		</div>
+	</div>
 
-	 	<div>
-			계정이 없으신가요?
-			<a href="/signup">&nbsp;가입하기 </a>
-		</div>
-	</section>
-
+	<div id="dropDownSelect1"></div>
 	
-	<section>
-		<h1>사이트소개</h1>
+<!-- START :: JS import -->
+<!--===============================================================================================-->
+	<script src="/resources/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/vendor/bootstrap/js/popper.js"></script>
+	<script src="/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/resources/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="/resources/js/main.js"></script>
+<!-- END :: JS import -->
+
+<script type="text/javascript">
+	$(function() {
 		
-		<div>
-	
-		</div>
-	</section>	
+		$("input[name='member_id']").keyup(function() {
+			$("#loginFailureMessage").remove();
+		});
+		
+		$("input[name='member_password']").keyup(function() {
+			$("#loginFailureMessage").remove();
+		});
+		
+	});
+</script>
 	
 </body>
 

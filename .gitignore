@@ -1,5 +1,7 @@
 /.metadata/
+/.classpath/
+/.project/
 
 /backup_code/
-
 /Servers/
+/target/

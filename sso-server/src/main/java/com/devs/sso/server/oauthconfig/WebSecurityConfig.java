@@ -21,6 +21,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private MemberService service;
+	
+	@Autowired
+	private AuthFailureHandler authFailureHandler;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -28,19 +31,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()//
 				.antMatchers(// security 필터를 거치지 않고 접근 허용
 						"/webjars/**", //
-						"/resources/**",//
+						"/resources/**", //
 						//
 						"/home", //
 						"/userInfo", //
 						"/signup", //
 						"/join", //
 						"/emailCheck", //
-						"/idCheck",//
-						"/kakaoOauth",
-						"/naverOauth",
-						"/snsjoin")//
-						
-				
+						"/idCheck", //
+						"/kakaoOauth", "/naverOauth", "/snsjoin")//
+
 				.permitAll()//
 				.anyRequest().authenticated()//
 				.and()//
@@ -51,9 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.loginPage("/loginForm")//
 				.usernameParameter("member_id").passwordParameter("member_password")//
 				.permitAll()//
+				.failureHandler(authFailureHandler)//
 				.and()//
-				
-				
 
 				.csrf()//
 				.requireCsrfProtectionMatcher(new AntPathRequestMatcher("/user*"))//
@@ -67,17 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public BCryptPasswordEncoder pwEncode() {
 		return new BCryptPasswordEncoder();
 	}
-
+	
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
 		auth.userDetailsService(service).passwordEncoder(pwEncode());
-		//
-//		auth
-//			.inMemoryAuthentication()
-//			.withUser("tsong").password("aaa").roles("USER").and()
-//			.withUser("jmpark").password("aaa").roles("USER").and()
-//			.withUser("jkkang").password("aaa").roles("USER").and()
-//			.withUser("test").password("aaa").roles("USER");
 	}
 }
